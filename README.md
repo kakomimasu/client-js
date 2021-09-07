@@ -1,2 +1,1 @@
-# client-js
-Kakomimasu client for JavaScript
+# Kakomimasu client for JavaScript
