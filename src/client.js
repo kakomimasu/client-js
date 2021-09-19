@@ -1,5 +1,3 @@
-/// <reference types="./client.d.ts" />
-
 export default class ApiClient {
   constructor(host = "http://localhost:8880") {
     this.baseUrl = host + "/api";
