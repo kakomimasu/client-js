@@ -1,0 +1,24 @@
+{
+  "name": "client-js",
+  "version": "1.0.0-beta.0",
+  "description": "",
+  "type":"module",
+  "main": "mod.js",
+  "types": "mod.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kakomimasu/client-js.git"
+  },
+  "author": "kakomimasu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kakomimasu/client-js/issues"
+  },
+  "homepage": "https://github.com/kakomimasu/client-js#readme",
+  "dependencies": {
+    "typescript": "^3.5.2"
+  }
+}
