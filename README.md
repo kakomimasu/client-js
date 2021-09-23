@@ -1,1 +1,1 @@
-# Kakomimasu client for JavaScript
+# Kakomimasu client for JavaScript/TypeScript
