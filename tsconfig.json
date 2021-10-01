@@ -1,0 +1,10 @@
+{
+  "files": ["./src/client.ts"],
+  "include": ["./src/**/*.ts","mod.ts"],
+  "compilerOptions": {
+    "target": "ESnext",
+    "declaration": true,
+    "outDir": "./dist",
+    "declarationDir": "./dist"
+  }
+}
