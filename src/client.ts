@@ -2,6 +2,7 @@ import {
   ActionReq,
   ActionRes,
   Board,
+  Error,
   Game,
   GameCreateReq,
   MatchReq,
