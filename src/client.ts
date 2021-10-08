@@ -14,7 +14,7 @@ import {
   User,
   UserDeleteReq,
   UserRegistReq,
-} from "./types.ts";
+} from "./deps.ts";
 
 export type ApiRes<T> = Promise<
   { success: true; data: T; res: Response } | {
