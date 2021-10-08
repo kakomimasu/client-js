@@ -1,4 +1,4 @@
-# Kakomimasu client for JavaScript
+# Kakomimasu server client for js/ts(browser/deno/node)
 
 # 対応状況
 
