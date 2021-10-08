@@ -1,3 +1,5 @@
+import { Error } from "../deps/0/api/types.js";
+export type { Error };
 export declare type ApiRes<T> = Promise<{
     success: true;
     data: T;
@@ -150,4 +152,3 @@ interface WsGameResUpdate {
     game: Game;
 }
 export declare type WsGameRes = WsGameResInitial | WsGameResUpdate;
-export {};
