@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 class ApiClient {
     constructor(host = "http://localhost:8880") {
-        this.baseUrl = host + "/api";
+        this.baseUrl = host + "/v1";
     }
     _fetchToJson(path) {
         return __awaiter(this, void 0, void 0, function* () {
