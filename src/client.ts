@@ -28,7 +28,7 @@ export default class ApiClient {
   public baseUrl: string;
 
   constructor(host = "http://localhost:8880") {
-    this.baseUrl = host + "/api";
+    this.baseUrl = host + "/v1";
   }
 
   async _fetchToJson(path: string) {

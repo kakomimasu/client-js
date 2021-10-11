@@ -1,4 +1,4 @@
-import { ActionReq, ActionRes, Board, Error, Game, GameCreateReq, MatchReq, MatchRes, TournamentAddUserReq, TournamentCreateReq, TournamentDeleteReq, TournamentRes, User, UserDeleteReq, UserRegistReq } from "./types.js";
+import { ActionReq, ActionRes, Board, Error, Game, GameCreateReq, MatchReq, MatchRes, TournamentAddUserReq, TournamentCreateReq, TournamentDeleteReq, TournamentRes, User, UserDeleteReq, UserRegistReq } from "./deps.js";
 export declare type ApiRes<T> = Promise<{
     success: true;
     data: T;
