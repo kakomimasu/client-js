@@ -1,1 +1,1 @@
-export * from "../deps/0/api/types.js";
+export * from "../deps/0/v1/types.js";
