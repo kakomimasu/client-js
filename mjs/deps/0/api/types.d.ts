@@ -13,7 +13,7 @@ export interface User extends UserBase {
     bearerToken?: string;
 }
 export interface UserRegistReq extends ApiOption, UserBase {
-    password: string;
+    password?: string;
 }
 export declare type UserDeleteReq = ApiOption;
 export declare type TournamentRes = Required<Tournament>;
