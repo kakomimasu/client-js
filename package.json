@@ -1,6 +1,5 @@
 {
   "name": "client-js",
-  "version": "v1.0.0-beta.2",
   "description": "Kakomimasu server client for js/ts(browser/deno/node)",
   "license": "MIT",
   "repository": {

@@ -1,4 +1,8 @@
-import { ApiOption } from "./parts/interface.js";
+export interface ApiOption {
+    option?: {
+        dryRun?: boolean;
+    };
+}
 export interface Error {
     message: string;
     errorCode: number;
