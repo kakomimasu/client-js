@@ -9,8 +9,8 @@ export declare type ApiRes<T> = Promise<{
     res: Response;
 }>;
 export default class ApiClient {
-    baseUrl: string;
-    constructor(host?: string);
+    baseUrl: URL;
+    constructor(host?: string | URL);
     _fetchToJson(path: string): Promise<any>;
     _fetchPostJson(path: string, data: object, auth?: string): Promise<Response>;
     _fetch(path: string, auth?: string): Promise<Response>;

@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,14 +7,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-class ApiClient {
-    constructor(host = "http://localhost:8880") {
-        this.baseUrl = host + "/v1";
+export default class ApiClient {
+    constructor(host = new URL("http://localhost:8880")) {
+        Object.defineProperty(this, "baseUrl", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        this.baseUrl = new URL("/v1", new URL("", host).origin);
     }
     _fetchToJson(path) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resJson = yield (yield fetch(this.baseUrl + path)).json();
+            const resJson = yield (yield fetch(new URL(path, this.baseUrl).href))
+                .json();
             return resJson;
         });
     }
@@ -25,7 +30,7 @@ class ApiClient {
             headers.append("Content-Type", "application/json");
             if (auth)
                 headers.append("Authorization", auth);
-            const res = yield fetch(this.baseUrl + path, {
+            const res = yield fetch(new URL(path, this.baseUrl).href, {
                 method: "POST",
                 headers,
                 body: JSON.stringify(data),
@@ -35,7 +40,7 @@ class ApiClient {
     }
     _fetch(path, auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            const res = yield fetch(this.baseUrl + path, auth
+            const res = yield fetch(new URL(path, this.baseUrl).href, auth
                 ? {
                     headers: new Headers({
                         Authorization: auth,
@@ -57,7 +62,7 @@ class ApiClient {
             headers.append("Content-Type", "application/json");
             if (auth)
                 headers.append("Authorization", auth);
-            const resJson = yield (yield fetch(this.baseUrl + path, {
+            const resJson = yield (yield fetch(new URL(path, this.baseUrl).href, {
                 method: "POST",
                 headers,
                 body: JSON.stringify(data),
@@ -152,4 +157,3 @@ class ApiClient {
         });
     }
 }
-exports.default = ApiClient;
