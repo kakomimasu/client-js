@@ -1,14 +1,30 @@
 // Deno to Node transform program
-import { run } from "https://deno.land/x/dnt@0.0.7/mod.ts";
+import { build } from "https://deno.land/x/dnt@0.0.19/mod.ts";
 
-await run({
-  entryPoint: "./mod.ts",
+const resolve = (path: string) => new URL(path, import.meta.url);
+
+const version = Deno.args[0];
+if (!version) {
+  throw Error("Version args need.");
+}
+
+try {
+  Deno.removeSync(resolve("../cjs"), { recursive: true });
+  Deno.removeSync(resolve("../mjs"), { recursive: true });
+  Deno.removeSync(resolve("../umd"), { recursive: true });
+  Deno.removeSync(resolve("../types"), { recursive: true });
+} catch (e) {
+  console.error(e);
+}
+
+await build({
+  entryPoints: ["./mod.ts"],
   outDir: ".",
   typeCheck: true,
   package: {
     // package.json properties
-    name: "client-js",
-    version: Deno.args[0],
+    name: "@kakomimasu/client-js",
+    version,
     description: "Kakomimasu server client for js/ts(browser/deno/node)",
     license: "MIT",
     repository: {
