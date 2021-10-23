@@ -25,14 +25,15 @@ export type ApiRes<T> = Promise<
 >;
 
 export default class ApiClient {
-  public baseUrl: string;
+  public baseUrl: URL;
 
-  constructor(host = "http://localhost:8880") {
-    this.baseUrl = host + "/v1";
+  constructor(host: string | URL = new URL("http://localhost:8880")) {
+    this.baseUrl = new URL("/v1", new URL("", host).origin);
   }
 
   async _fetchToJson(path: string) {
-    const resJson = await (await fetch(this.baseUrl + path)).json();
+    const resJson = await (await fetch(new URL(path, this.baseUrl).href))
+      .json();
     return resJson;
   }
 
@@ -41,7 +42,7 @@ export default class ApiClient {
     headers.append("Content-Type", "application/json");
     if (auth) headers.append("Authorization", auth);
     const res = await fetch(
-      this.baseUrl + path,
+      new URL(path, this.baseUrl).href,
       {
         method: "POST",
         headers,
@@ -53,7 +54,7 @@ export default class ApiClient {
 
   async _fetch(path: string, auth?: string) {
     const res = await fetch(
-      this.baseUrl + path,
+      new URL(path, this.baseUrl).href,
       auth
         ? {
           headers: new Headers({
@@ -75,7 +76,7 @@ export default class ApiClient {
     headers.append("Content-Type", "application/json");
     if (auth) headers.append("Authorization", auth);
     const resJson = await (await fetch(
-      this.baseUrl + path,
+      new URL(path, this.baseUrl).href,
       {
         method: "POST",
         headers,
