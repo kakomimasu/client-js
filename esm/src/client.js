@@ -127,9 +127,9 @@ export default class ApiClient {
             return { success: res.status === 200, data: yield res.json(), res };
         });
     }
-    gameCreate(data) {
+    gameCreate(data, auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            const res = yield this._fetchPostJson("/v1/game/create", data);
+            const res = yield this._fetchPostJson("/v1/game/create", data, auth);
             return { success: res.status === 200, data: yield res.json(), res };
         });
     }
