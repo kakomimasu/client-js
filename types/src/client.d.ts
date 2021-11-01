@@ -26,7 +26,7 @@ export default class ApiClient {
     tournamentsGet(): ApiRes<TournamentRes[]>;
     tournamentsDelete(data: TournamentDeleteReq): ApiRes<TournamentRes>;
     tournamentsAddUser(tournamentId: string, data: TournamentAddUserReq): ApiRes<TournamentRes>;
-    gameCreate(data: GameCreateReq): ApiRes<Game>;
+    gameCreate(data: GameCreateReq, auth?: string): ApiRes<Game>;
     getBoards(): ApiRes<Board[]>;
     match(data: MatchReq, auth: string): ApiRes<MatchRes>;
     getMatch(gameId: string): ApiRes<Game>;

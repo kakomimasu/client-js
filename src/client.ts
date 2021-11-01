@@ -142,8 +142,8 @@ export default class ApiClient {
     return { success: res.status === 200, data: await res.json(), res };
   }
 
-  async gameCreate(data: GameCreateReq): ApiRes<Game> {
-    const res = await this._fetchPostJson("/v1/game/create", data);
+  async gameCreate(data: GameCreateReq, auth?: string): ApiRes<Game> {
+    const res = await this._fetchPostJson("/v1/game/create", data, auth);
     return { success: res.status === 200, data: await res.json(), res };
   }
 
