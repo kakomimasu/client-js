@@ -36,6 +36,7 @@ export interface GameCreateReq extends ApiOption {
     nPlayer?: number;
     playerIdentifiers?: string[];
     tournamentId?: string;
+    isMySelf?: boolean;
 }
 export interface MatchReq extends ApiOption {
     spec?: string;
@@ -73,21 +74,26 @@ export interface Game {
     board: Board | null;
     turn: number;
     totalTurn: number;
-    tiled: Array<[0 | 1, number]> | null;
+    tiled: {
+        type: 0 | 1;
+        player: number | null;
+    }[] | null;
     players: Player[];
     log: {
-        point: {
-            basepoint: number;
-            wallpoint: number;
-        };
-        actions: {
-            agentId: number;
-            type: 1 | 2 | 3 | 4;
-            x: number;
-            y: number;
-            res: 0 | 1 | 2 | 3 | 4 | 5;
+        players: {
+            point: {
+                basepoint: number;
+                wallpoint: number;
+            };
+            actions: {
+                agentId: number;
+                type: 1 | 2 | 3 | 4;
+                x: number;
+                y: number;
+                res: 0 | 1 | 2 | 3 | 4 | 5;
+            }[];
         }[];
-    }[][];
+    }[];
     gameName: string | undefined;
     startedAtUnixTime: number | null;
     nextTurnUnixTime: number | null;
