@@ -22,8 +22,8 @@ jobs:
       - name: Run test
         if: ${{ runner.os == 'Windows' }}
         run: |
-          deno test -A .\src\
+          deno test -A src/
       - name: Run test
         if: ${{ runner.os != 'Windows' }}
         run: |
-          deno test -A .\src\
+          deno test -A src/
