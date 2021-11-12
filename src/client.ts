@@ -37,6 +37,7 @@ export default class ApiClient {
     return resJson;
   }
 
+  // deno-lint-ignore ban-types
   async _fetchPostJson(path: string, data: object, auth?: string) {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -67,24 +68,19 @@ export default class ApiClient {
     return res;
   }
 
-  async _fetchPostJsonToJson(path: string, data: object, auth: string) {
-    const resJson = await (await this._fetchPostJson(path, data, auth)).json();
+  async _fetchPostJsonToJson(
+    ...param: Parameters<ApiClient["_fetchPostJson"]>
+  ) {
+    const resJson = await (await this._fetchPostJson(...param)).json();
     return resJson;
   }
 
-  async _fetchPostJsonToJsonWithAuth(path: string, data: object, auth: string) {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    if (auth) headers.append("Authorization", auth);
-    const resJson = await (await fetch(
-      new URL(path, this.baseUrl).href,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify(data),
-      },
-    )).json();
-    return resJson;
+  async _fetchPostJsonToJsonWithAuth(
+    ...param: Parameters<ApiClient["_fetchPostJson"]>
+  ) {
+    const res = await this._fetchPostJson(...param);
+    const json = await res.json();
+    return json;
   }
 
   async usersVerify(idToken: string): ApiRes<undefined> {

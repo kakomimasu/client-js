@@ -8,7 +8,14 @@
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
+  "[json]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
   "deno.suggest.imports.hosts": {
     "https://deno.land": false
-  }
+  },
+  "json.schemas": [{
+    "fileMatch": ["/deno.json"],
+    "url": "https://cdn.deno.land/deno/versions/v1.14.0/raw/cli/schemas/config-file.v1.json"
+  }]
 }
