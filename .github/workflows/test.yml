@@ -19,9 +19,6 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      - name: Run cache & check
-        run: |
-          deno cache ./server.ts
       - name: Run test
         if: ${{ runner.os == 'Windows' }}
         run: |
