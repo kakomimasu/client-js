@@ -24,6 +24,7 @@ export default class ApiClient {
             return resJson;
         });
     }
+    // deno-lint-ignore ban-types
     _fetchPostJson(path, data, auth) {
         return __awaiter(this, void 0, void 0, function* () {
             const headers = new Headers();
@@ -51,24 +52,17 @@ export default class ApiClient {
             return res;
         });
     }
-    _fetchPostJsonToJson(path, data, auth) {
+    _fetchPostJsonToJson(...param) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resJson = yield (yield this._fetchPostJson(path, data, auth)).json();
+            const resJson = yield (yield this._fetchPostJson(...param)).json();
             return resJson;
         });
     }
-    _fetchPostJsonToJsonWithAuth(path, data, auth) {
+    _fetchPostJsonToJsonWithAuth(...param) {
         return __awaiter(this, void 0, void 0, function* () {
-            const headers = new Headers();
-            headers.append("Content-Type", "application/json");
-            if (auth)
-                headers.append("Authorization", auth);
-            const resJson = yield (yield fetch(new URL(path, this.baseUrl).href, {
-                method: "POST",
-                headers,
-                body: JSON.stringify(data),
-            })).json();
-            return resJson;
+            const res = yield this._fetchPostJson(...param);
+            const json = yield res.json();
+            return json;
         });
     }
     usersVerify(idToken) {

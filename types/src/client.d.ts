@@ -14,8 +14,8 @@ export default class ApiClient {
     _fetchToJson(path: string): Promise<any>;
     _fetchPostJson(path: string, data: object, auth?: string): Promise<Response>;
     _fetch(path: string, auth?: string): Promise<Response>;
-    _fetchPostJsonToJson(path: string, data: object, auth: string): Promise<any>;
-    _fetchPostJsonToJsonWithAuth(path: string, data: object, auth: string): Promise<any>;
+    _fetchPostJsonToJson(...param: Parameters<ApiClient["_fetchPostJson"]>): Promise<any>;
+    _fetchPostJsonToJsonWithAuth(...param: Parameters<ApiClient["_fetchPostJson"]>): Promise<any>;
     usersVerify(idToken: string): ApiRes<undefined>;
     usersRegist(data: UserRegistReq, auth?: string): ApiRes<Required<User>>;
     usersDelete(data: UserDeleteReq, auth: string): ApiRes<User>;
