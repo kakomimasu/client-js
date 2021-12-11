@@ -9,8 +9,7 @@ if (!version) {
 }
 
 try {
-  Deno.removeSync(resolve("../cjs"), { recursive: true });
-  Deno.removeSync(resolve("../mjs"), { recursive: true });
+  Deno.removeSync(resolve("../esm"), { recursive: true });
   Deno.removeSync(resolve("../umd"), { recursive: true });
   Deno.removeSync(resolve("../types"), { recursive: true });
 } catch (e) {

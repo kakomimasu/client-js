@@ -17,13 +17,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./src/client.js", "./src/deps.js"], factory);
+        define(["require", "exports", "./deps/raw_githubusercontent_com_kako/client/client.js", "./deps/raw_githubusercontent_com_kako/v1/types.js"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = void 0;
-    var client_js_1 = require("./src/client.js");
+    var client_js_1 = require("./deps/raw_githubusercontent_com_kako/client/client.js");
     Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(client_js_1).default; } });
-    __exportStar(require("./src/deps.js"), exports);
+    __exportStar(require("./deps/raw_githubusercontent_com_kako/v1/types.js"), exports);
 });
