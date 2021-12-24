@@ -46,12 +46,16 @@ export interface MatchReq extends ApiOption {
         aiName: string;
         boardName?: string;
     };
+    guest?: {
+        name: string;
+    };
 }
 export interface MatchRes {
     userId: string;
     spec: string;
     gameId: string;
     index: number;
+    pic: string;
 }
 export interface ActionPost {
     agentId: number;
@@ -61,7 +65,6 @@ export interface ActionPost {
 }
 export interface ActionReq extends ApiOption {
     actions: ActionPost[];
-    index?: number;
 }
 export interface ActionRes {
     receptionUnixTime: number;
