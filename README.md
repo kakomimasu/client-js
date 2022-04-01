@@ -14,5 +14,5 @@
 下記コマンドで`package.json`,`package-lock.json`,`esm`フォルダ,`cjs`フォルダを自動生成してくれる。
 
 ```console
-$ deno run -A scripts/dnt.ts
+$ deno task dnt
 ```

@@ -140,6 +140,7 @@ export interface WsGameReq {
     q: string;
     startIndex?: number;
     endIndex?: number;
+    allowNewGame?: boolean;
 }
 interface WsGameResInitial {
     type: "initial";
@@ -153,5 +154,13 @@ interface WsGameResUpdate {
     type: "update";
     game: Game;
 }
-export declare type WsGameRes = WsGameResInitial | WsGameResUpdate;
+interface WsGameResRemove {
+    type: "remove";
+    gameId: string;
+}
+interface WsGameResAdd {
+    type: "add";
+    game: Game;
+}
+export declare type WsGameRes = WsGameResInitial | WsGameResUpdate | WsGameResRemove | WsGameResAdd;
 export {};

@@ -17,13 +17,6 @@ export default class ApiClient {
         });
         this.baseUrl = new URL("", host);
     }
-    _fetchToJson(path) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const resJson = yield (yield fetch(new URL(path, this.baseUrl).href))
-                .json();
-            return resJson;
-        });
-    }
     // deno-lint-ignore ban-types
     _fetchPostJson(path, data, auth) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,38 +24,45 @@ export default class ApiClient {
             headers.append("Content-Type", "application/json");
             if (auth)
                 headers.append("Authorization", auth);
-            const res = yield fetch(new URL(path, this.baseUrl).href, {
-                method: "POST",
-                headers,
-                body: JSON.stringify(data),
-            });
-            return res;
+            try {
+                const res = yield fetch(new URL(path, this.baseUrl).href, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify(data),
+                });
+                return res;
+            }
+            catch (e) {
+                const error = { errorCode: -1, message: e.message };
+                const res = new Response(JSON.stringify(error), { status: 404 });
+                return res;
+            }
         });
     }
     _fetch(path, auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(new URL(path, this.baseUrl).href);
-            const res = yield fetch(new URL(path, this.baseUrl).href, auth
-                ? {
-                    headers: new Headers({
-                        Authorization: auth,
-                    }),
-                }
-                : {});
-            return res;
+            // console.log(new URL(path, this.baseUrl).href);
+            try {
+                const res = yield fetch(new URL(path, this.baseUrl).href, auth
+                    ? {
+                        headers: new Headers({
+                            Authorization: auth,
+                        }),
+                    }
+                    : {});
+                return res;
+            }
+            catch (e) {
+                const error = { errorCode: -1, message: e.message };
+                const res = new Response(JSON.stringify(error), { status: 404 });
+                return res;
+            }
         });
     }
-    _fetchPostJsonToJson(...param) {
+    getVersion() {
         return __awaiter(this, void 0, void 0, function* () {
-            const resJson = yield (yield this._fetchPostJson(...param)).json();
-            return resJson;
-        });
-    }
-    _fetchPostJsonToJsonWithAuth(...param) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const res = yield this._fetchPostJson(...param);
-            const json = yield res.json();
-            return json;
+            const res = yield this._fetch("/version");
+            return { success: res.status === 200, data: yield res.json(), res };
         });
     }
     usersVerify(idToken) {

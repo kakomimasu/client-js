@@ -3,7 +3,7 @@
   "main": "./umd/mod.js",
   "types": "./types/mod.d.ts",
   "name": "@kakomimasu/client-js",
-  "version": "v1.0.0-beta.6",
+  "version": "v1.0.0-beta.7",
   "description": "Kakomimasu server client for js/ts(browser/deno/node)",
   "license": "MIT",
   "repository": {

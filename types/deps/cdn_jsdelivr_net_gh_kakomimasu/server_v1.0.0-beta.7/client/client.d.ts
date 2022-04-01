@@ -1,3 +1,4 @@
+import { VersionRes } from "../types.js";
 import { ActionReq, ActionRes, Board, Error, Game, GameCreateReq, MatchReq, MatchRes, TournamentAddUserReq, TournamentCreateReq, TournamentDeleteReq, TournamentRes, User, UserDeleteReq, UserRegistReq } from "../v1/types.js";
 export declare type ApiRes<T> = Promise<{
     success: true;
@@ -11,11 +12,9 @@ export declare type ApiRes<T> = Promise<{
 export default class ApiClient {
     baseUrl: URL;
     constructor(host?: string | URL);
-    _fetchToJson(path: string): Promise<any>;
     _fetchPostJson(path: string, data: object, auth?: string): Promise<Response>;
     _fetch(path: string, auth?: string): Promise<Response>;
-    _fetchPostJsonToJson(...param: Parameters<ApiClient["_fetchPostJson"]>): Promise<any>;
-    _fetchPostJsonToJsonWithAuth(...param: Parameters<ApiClient["_fetchPostJson"]>): Promise<any>;
+    getVersion(): ApiRes<VersionRes>;
     usersVerify(idToken: string): ApiRes<undefined>;
     usersRegist(data: UserRegistReq, auth?: string): ApiRes<Required<User>>;
     usersDelete(data: UserDeleteReq, auth: string): ApiRes<User>;

@@ -8,5 +8,8 @@
     "files": {
       "include": ["src/"]
     }
+  },
+  "tasks": {
+    "dnt": "deno run -A scripts/dnt.ts"
   }
 }
