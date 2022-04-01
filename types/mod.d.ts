@@ -1,2 +1,2 @@
-export { default } from "./deps/raw_githubusercontent_com_kako/client/client.js";
-export * from "./deps/raw_githubusercontent_com_kako/v1/types.js";
+export { default } from "./deps/cdn_jsdelivr_net_gh_kakomimasu/server_v1.0.0-beta.7/client/client.js";
+export * from "./deps/cdn_jsdelivr_net_gh_kakomimasu/server_v1.0.0-beta.7/v1/types.js";
