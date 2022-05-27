@@ -1,5 +1,9 @@
 import { VersionRes } from "../types.js";
-import { ActionReq, ActionRes, Board, Error, Game, GameCreateReq, MatchReq, MatchRes, TournamentAddUserReq, TournamentCreateReq, TournamentDeleteReq, TournamentRes, User, UserDeleteReq, UserRegistReq } from "../v1/types.js";
+import { Error } from "../core/types.js";
+import { ActionReq, ActionRes, Board, Game, GameCreateReq, MatchReq, MatchRes, TournamentAddUserReq, TournamentCreateReq, TournamentDeleteReq, TournamentRes, User, UserDeleteReq, UserRegistReq } from "../v1/types.js";
+export * from "../types.js";
+export * from "../core/types.js";
+export * from "../v1/types.js";
 export declare type ApiRes<T> = Promise<{
     success: true;
     data: T;

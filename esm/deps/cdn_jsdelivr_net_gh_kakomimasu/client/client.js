@@ -7,6 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+export * from "../types.js";
+export * from "../core/types.js";
+export * from "../v1/types.js";
 export default class ApiClient {
     constructor(host = new URL("http://localhost:8880")) {
         Object.defineProperty(this, "baseUrl", {
