@@ -22,8 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ApiClient = void 0;
     __exportStar(require("./deps/cdn_jsdelivr_net_gh_kakomimasu/client/client.js"), exports);
-    var client_js_1 = require("./deps/cdn_jsdelivr_net_gh_kakomimasu/client/client.js");
-    Object.defineProperty(exports, "ApiClient", { enumerable: true, get: function () { return __importDefault(client_js_1).default; } });
+    const client_js_1 = __importDefault(require("./deps/cdn_jsdelivr_net_gh_kakomimasu/client/client.js"));
+    exports.default = client_js_1.default;
 });
