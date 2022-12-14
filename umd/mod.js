@@ -22,8 +22,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    // export * from "../server/client/client.ts";
-    // import { default as ApiClient } from "../server/client/client.ts";
+    // export * from "../../server/client/client.ts";
+    // import { default as ApiClient } from "../../server/client/client.ts";
     __exportStar(require("./deps/cdn_jsdelivr_net_gh_kakomimasu/client/client.js"), exports);
     const client_js_1 = __importDefault(require("./deps/cdn_jsdelivr_net_gh_kakomimasu/client/client.js"));
     exports.default = client_js_1.default;
