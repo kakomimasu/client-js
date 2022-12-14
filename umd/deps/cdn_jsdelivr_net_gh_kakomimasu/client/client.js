@@ -17,22 +17,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "../types.js", "../core/types.js", "../v1/types.js"], factory);
+        define(["require", "exports", "./types.js"], factory);
     }
 })(function (require, exports) {
     "use strict";
+    var _ApiClient_instances, _ApiClient_fetch;
     Object.defineProperty(exports, "__esModule", { value: true });
-    __exportStar(require("../types.js"), exports);
-    __exportStar(require("../core/types.js"), exports);
-    __exportStar(require("../v1/types.js"), exports);
+    __exportStar(require("./types.js"), exports);
     class ApiClient {
         constructor(host = new URL("http://localhost:8880")) {
+            _ApiClient_instances.add(this);
             Object.defineProperty(this, "baseUrl", {
                 enumerable: true,
                 configurable: true,
@@ -41,140 +46,122 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             });
             this.baseUrl = new URL("", host);
         }
-        // deno-lint-ignore ban-types
-        _fetchPostJson(path, data, auth) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const headers = new Headers();
-                headers.append("Content-Type", "application/json");
-                if (auth)
-                    headers.append("Authorization", auth);
-                try {
-                    const res = yield fetch(new URL(path, this.baseUrl).href, {
-                        method: "POST",
-                        headers,
-                        body: JSON.stringify(data),
-                    });
-                    return res;
-                }
-                catch (e) {
-                    const error = { errorCode: -1, message: e.message };
-                    const res = new Response(JSON.stringify(error), { status: 404 });
-                    return res;
-                }
-            });
-        }
-        _fetch(path, auth) {
-            return __awaiter(this, void 0, void 0, function* () {
-                // console.log(new URL(path, this.baseUrl).href);
-                try {
-                    const res = yield fetch(new URL(path, this.baseUrl).href, auth
-                        ? {
-                            headers: new Headers({
-                                Authorization: auth,
-                            }),
-                        }
-                        : {});
-                    return res;
-                }
-                catch (e) {
-                    const error = { errorCode: -1, message: e.message };
-                    const res = new Response(JSON.stringify(error), { status: 404 });
-                    return res;
-                }
-            });
-        }
         getVersion() {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch("/version");
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/version");
             });
         }
-        usersVerify(idToken) {
+        createUser(data, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch("/v1/users/verify", idToken);
-                const success = res.status === 200;
-                const data = success ? undefined : yield res.json();
-                return { success, data, res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/v1/users", { method: "POST", data, auth });
             });
         }
-        usersRegist(data, auth) {
+        deleteUser(idOrName, data, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson("/v1/users/regist", data, auth);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/${idOrName}`, { data, auth, method: "DELETE" });
             });
         }
-        usersDelete(data, auth) {
+        getUser(idOrName, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson("/v1/users/delete", data, auth);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/${idOrName}`, { auth: auth });
             });
         }
-        usersShow(identifier, idToken) {
+        getUsers(query) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch(`/v1/users/show/${identifier}`, idToken);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users?q=${query}`);
             });
         }
-        usersSearch(searchText) {
+        createTournament(data) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch(`/v1/users/search?q=${searchText}`);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/v1/tournaments", { data, method: "POST" });
             });
         }
-        tournamentsCreate(data) {
+        getTournaments() {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson("/v1/tournament/create", data);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/tournaments`);
             });
         }
-        tournamentsGet(id = "") {
+        getTournament(id) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch(`/v1/tournament/get?id=${id}`);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/tournaments/${id}`);
             });
         }
-        tournamentsDelete(data) {
+        deleteTournament(tournamentId, data) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson("/v1/tournament/delete", data);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/tournaments/${tournamentId}`, { data, method: "DELETE" });
             });
         }
-        tournamentsAddUser(tournamentId, data) {
+        addTournamentUser(id, data) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson(`/v1/tournament/add?id=${tournamentId}`, data);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/tournaments/${id}/users`, { data, method: "POST" });
             });
         }
-        gameCreate(data, auth) {
+        createMatch(data, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson("/v1/game/create", data, auth);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/v1/matches", { data, auth, method: "POST" });
             });
         }
         getBoards() {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch("/v1/game/boards");
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/v1/boards");
             });
         }
-        match(data, auth) {
+        joinGameIdMatch(id, data, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson("/v1/match", data, auth);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/matches/${id}/players`, { data, auth, method: "POST" });
             });
         }
-        getMatch(gameId) {
+        joinFreeMatch(data, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetch(`/v1/match/${gameId}`);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/matches/free/players`, { data, auth, method: "POST" });
             });
         }
-        setAction(gameId, data, auth) {
+        joinAiMatch(data, auth) {
             return __awaiter(this, void 0, void 0, function* () {
-                const res = yield this._fetchPostJson(`/v1/match/${gameId}/action`, data, auth);
-                return { success: res.status === 200, data: yield res.json(), res };
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/matches/ai/players`, { data, auth, method: "POST" });
+            });
+        }
+        getMatch(id) {
+            return __awaiter(this, void 0, void 0, function* () {
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/matches/${id}`);
+            });
+        }
+        setAction(id, data, auth) {
+            return __awaiter(this, void 0, void 0, function* () {
+                return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/matches/${id}/actions`, { data, auth, method: "PATCH" });
             });
         }
     }
     exports.default = ApiClient;
+    _ApiClient_instances = new WeakSet(), _ApiClient_fetch = function _ApiClient_fetch(path, init = {}) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const headers = new Headers();
+            if (init.auth)
+                headers.append("Authorization", init.auth);
+            const method = (_a = init.method) !== null && _a !== void 0 ? _a : "GET";
+            if (method !== "GET") {
+                headers.append("Content-Type", "application/json");
+            }
+            const body = ("data" in init && init.data) ? init.data : {};
+            try {
+                const res = yield fetch(new URL(path, this.baseUrl).href, {
+                    method: method,
+                    headers,
+                    body: method !== "GET" ? JSON.stringify(body) : undefined,
+                });
+                return {
+                    success: res.status === 200,
+                    // deno-lint-ignore no-explicit-any
+                    data: yield res.json(),
+                    res,
+                };
+            }
+            catch (e) {
+                const data = { errorCode: -1, message: e.message };
+                const res = new Response(JSON.stringify(data), { status: 404 });
+                return { success: false, data, res };
+            }
+        });
+    };
 });

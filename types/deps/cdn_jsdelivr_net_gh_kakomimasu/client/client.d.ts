@@ -1,37 +1,33 @@
-import { VersionRes } from "../types.js";
-import { Error } from "../core/types.js";
-import { ActionReq, ActionRes, Board, Game, GameCreateReq, MatchReq, MatchRes, TournamentAddUserReq, TournamentCreateReq, TournamentDeleteReq, TournamentRes, User, UserDeleteReq, UserRegistReq } from "../v1/types.js";
-export * from "../types.js";
-export * from "../core/types.js";
-export * from "../v1/types.js";
-export declare type ApiRes<T> = Promise<{
+import * as T from "./types.js";
+export * from "./types.js";
+export declare type ApiRes<T> = {
     success: true;
     data: T;
     res: Response;
 } | {
     success: false;
-    data: Error;
+    data: T.ErrorRes;
     res: Response;
-}>;
+};
 export default class ApiClient {
+    #private;
     baseUrl: URL;
     constructor(host?: string | URL);
-    _fetchPostJson(path: string, data: object, auth?: string): Promise<Response>;
-    _fetch(path: string, auth?: string): Promise<Response>;
-    getVersion(): ApiRes<VersionRes>;
-    usersVerify(idToken: string): ApiRes<undefined>;
-    usersRegist(data: UserRegistReq, auth?: string): ApiRes<Required<User>>;
-    usersDelete(data: UserDeleteReq, auth: string): ApiRes<User>;
-    usersShow(identifier: string, idToken?: string): ApiRes<User>;
-    usersSearch(searchText: string): ApiRes<User[]>;
-    tournamentsCreate(data: TournamentCreateReq): ApiRes<TournamentRes>;
-    tournamentsGet(id: string): ApiRes<TournamentRes>;
-    tournamentsGet(): ApiRes<TournamentRes[]>;
-    tournamentsDelete(data: TournamentDeleteReq): ApiRes<TournamentRes>;
-    tournamentsAddUser(tournamentId: string, data: TournamentAddUserReq): ApiRes<TournamentRes>;
-    gameCreate(data: GameCreateReq, auth?: string): ApiRes<Game>;
-    getBoards(): ApiRes<Board[]>;
-    match(data: MatchReq, auth?: string): ApiRes<MatchRes>;
-    getMatch(gameId: string): ApiRes<Game>;
-    setAction(gameId: string, data: ActionReq, auth: string): ApiRes<ActionRes>;
+    getVersion(): Promise<ApiRes<T.VersionRes>>;
+    createUser(data: T.CreateUserReq, auth?: string): Promise<ApiRes<T.AuthedUser>>;
+    deleteUser(idOrName: string, data: T.DeleteUserReq, auth: string): Promise<ApiRes<T.AuthedUser>>;
+    getUser(idOrName: string, auth?: string): Promise<ApiRes<T.User>>;
+    getUsers(query: string): Promise<ApiRes<T.GetUsersRes>>;
+    createTournament(data: T.CreateTournamentReq): Promise<ApiRes<T.Tournament>>;
+    getTournaments(): Promise<ApiRes<T.GetTournamentsRes>>;
+    getTournament(id: string): Promise<ApiRes<T.Tournament>>;
+    deleteTournament(tournamentId: string, data?: T.DeleteTournamentReq): Promise<ApiRes<T.Tournament>>;
+    addTournamentUser(id: string, data: T.AddTournamentUserReq): Promise<ApiRes<T.Tournament>>;
+    createMatch(data: T.CreateMatchReq, auth?: string): Promise<ApiRes<T.Game>>;
+    getBoards(): Promise<ApiRes<T.GetBoardsRes>>;
+    joinGameIdMatch(id: string, data: T.JoinGameIdMatchReq, auth?: string): Promise<ApiRes<T.JoinMatchRes>>;
+    joinFreeMatch(data: T.JoinFreeMatchReq, auth?: string): Promise<ApiRes<T.JoinMatchRes>>;
+    joinAiMatch(data: T.JoinAiMatchReq, auth?: string): Promise<ApiRes<T.JoinMatchRes>>;
+    getMatch(id: string): Promise<ApiRes<T.Game>>;
+    setAction(id: string, data: T.ActionMatchReq, auth: string): Promise<ApiRes<T.ActionMatchRes>>;
 }
