@@ -42,7 +42,7 @@ export declare type JoinGameIdMatchRes = JoinMatchRes;
 export declare type JoinFreeMatchReq = JoinMatchReqBase & DryRunOption;
 export declare type JoinFreeMatchRes = JoinMatchRes;
 export declare type JoinAiMatchReq = JoinMatchReqBase & {
-    aiName: "none" | "a1" | "a2" | "a3" | "a4" | "a5";
+    aiName: "none" | "a1" | "a2" | "a3" | "a4";
     boardName?: string;
 } & DryRunOption;
 export declare type JoinAiMatchRes = JoinMatchRes;
@@ -118,17 +118,23 @@ export declare type CreateUserReq = {
     name: string;
 } & DryRunOption;
 export declare type CreateUserRes = AuthedUser;
+export declare type RegenerateUserTokenRes = AuthedUser;
 export declare type Game = {
     id: string;
-    gaming: boolean;
-    ending: boolean;
-    board: Board | null;
+    status: "free" | "ready" | "gaming" | "ended";
     turn: number;
     totalTurn: number;
-    tiled: {
-        type: typeof TileType[keyof typeof TileType];
-        player: number | null;
-    }[] | null;
+    nPlayer: number;
+    nAgent: number;
+    field: {
+        width: number;
+        height: number;
+        points: number[];
+        tiles: {
+            type: typeof TileType[keyof typeof TileType];
+            player: number | null;
+        }[];
+    } | null;
     players: Player[];
     log: {
         players: {
@@ -153,10 +159,11 @@ export declare type Board = {
     name: string;
     width: number;
     height: number;
-    nAgent: number;
-    nPlayer: number;
-    nTurn: number;
-    nSec: number;
+    nAgent?: number;
+    nPlayer?: number;
+    totalTurn?: number;
+    operationSec?: number;
+    transitionSec?: number;
     points: number[];
 };
 export declare type Point = {

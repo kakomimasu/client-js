@@ -15,6 +15,7 @@ export default class ApiClient {
     constructor(host?: string | URL);
     getVersion(): Promise<ApiRes<T.VersionRes>>;
     createUser(data: T.CreateUserReq, auth?: string): Promise<ApiRes<T.AuthedUser>>;
+    regenerateUserToken(idOrName: string, auth: string): Promise<ApiRes<T.AuthedUser>>;
     deleteUser(idOrName: string, data: T.DeleteUserReq, auth: string): Promise<ApiRes<T.AuthedUser>>;
     getUser(idOrName: string, auth?: string): Promise<ApiRes<T.User>>;
     getUsers(query: string): Promise<ApiRes<T.GetUsersRes>>;

@@ -35,6 +35,11 @@ export default class ApiClient {
             return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/v1/users", { method: "POST", data, auth });
         });
     }
+    regenerateUserToken(idOrName, auth) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/${idOrName}/token`, { auth });
+        });
+    }
     deleteUser(idOrName, data, auth) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/${idOrName}`, { data, auth, method: "DELETE" });
