@@ -30,19 +30,19 @@ export default class ApiClient {
             return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/version");
         });
     }
-    createUser(data, auth) {
+    regenerateUserMeToken(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, "/v1/users", { method: "POST", data, auth });
+            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/me/token`, { auth });
         });
     }
-    regenerateUserToken(idOrName, auth) {
+    getUserMe(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/${idOrName}/token`, { auth });
+            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/me`, { auth });
         });
     }
-    deleteUser(idOrName, data, auth) {
+    deleteUserMe(data, auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/${idOrName}`, { data, auth, method: "DELETE" });
+            return yield __classPrivateFieldGet(this, _ApiClient_instances, "m", _ApiClient_fetch).call(this, `/v1/users/me`, { data, auth, method: "DELETE" });
         });
     }
     getUser(idOrName, auth) {

@@ -117,16 +117,12 @@ export declare type AddTournamentUserReq = {
     user: string;
 } & DryRunOption;
 export declare type AddTournamentUserRes = Tournament;
-export declare type GetUserRes = User;
-export declare type DeleteUserReq = DryRunOption;
-export declare type DeleteUserRes = AuthedUser;
-export declare type GetUsersRes = User[];
-export declare type CreateUserReq = {
-    screenName: string;
-    name: string;
-} & DryRunOption;
-export declare type CreateUserRes = AuthedUser;
+export declare type GetUserMeRes = AuthedUser;
+export declare type DeleteUserMeReq = DryRunOption;
+export declare type DeleteUserMeRes = AuthedUser;
 export declare type RegenerateUserTokenRes = AuthedUser;
+export declare type GetUserRes = User;
+export declare type GetUsersRes = User[];
 export declare type Game = {
     id: string;
     status: "free" | "ready" | "gaming" | "ended";
@@ -196,16 +192,13 @@ export declare type Tournament = {
     id: string;
     gameIds: string[];
 };
-declare type UserBase = {
+export declare type User = {
     screenName: string;
     name: string;
     id: string;
     gameIds: string[];
+    avaterUrl: string;
 };
-export declare type User = UserBase & {
-    bearerToken?: string;
-};
-export declare type AuthedUser = UserBase & {
+export declare type AuthedUser = User & {
     bearerToken: string;
 };
-export {};
