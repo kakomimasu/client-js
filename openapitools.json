@@ -1,7 +1,18 @@
 {
-  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "$schema": "https://raw.githubusercontent.com/OpenAPITools/openapi-generator-cli/refs/heads/master/apps/generator-cli/src/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.12.0"
+    "version": "7.12.0",
+    "generators": {
+      "deno": {
+        "generatorName": "typescript",
+        "inputSpec": "https://api.kakomimasu.com/v1/openapi.json",
+        "output": "src",
+        "templateDir": "template",
+        "additionalProperties": {
+          "platform": "deno"
+        }
+      }
+    }
   }
 }
