@@ -2,6 +2,7 @@
 import {BaseAPIRequestFactory, RequiredError, COLLECTION_FORMATS} from './baseapi{{importFileExtension}}';
 import {Configuration} from '../configuration{{importFileExtension}}';
 import {RequestContext, HttpMethod, ResponseContext, HttpFile, HttpInfo} from '../http/http{{importFileExtension}}';
+import { configureAuthMethods } from "../auth/auth{{importFileExtension}}";
 {{#platforms}}
 {{#node}}
 import {{^supportsES6}}* as{{/supportsES6}} FormData from "form-data";
@@ -43,7 +44,7 @@ export class {{classname}}RequestFactory extends BaseAPIRequestFactory {
      {{/allParams}}
      */
     public async {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}_options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
+        const _config = _options || this.configuration;
         {{#allParams}}
 
         {{#required}}
@@ -172,11 +173,12 @@ export class {{classname}}RequestFactory extends BaseAPIRequestFactory {
         {{/bodyParam}}
 
         {{#hasAuthMethods}}
+        // deno-lint-ignore prefer-const
         let authMethod: SecurityAuthentication | undefined;
         {{/hasAuthMethods}}
         {{#authMethods}}
         // Apply auth methods
-        authMethod = _config.authMethods["{{name}}"]
+        authMethod = configureAuthMethods(_config.authMethods)["{{name}}"]
         if (authMethod?.applySecurityAuthentication) {
             await authMethod?.applySecurityAuthentication(requestContext);
         }
@@ -219,10 +221,7 @@ export class {{classname}}ResponseProcessor {
             const body: {{{dataType}}} = await response.getBodyAsFile() as any as {{{returnType}}};
             {{/isBinary}}
             {{^isBinary}}
-            const body: {{{dataType}}} = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "{{{dataType}}}", "{{returnFormat}}"
-            ) as {{{dataType}}};
+            const body: {{{dataType}}} = ObjectSerializer.parse(await response.body.text(), contentType);
             {{/isBinary}}
             {{#is2xx}}
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
@@ -249,10 +248,7 @@ export class {{classname}}ResponseProcessor {
             const body: {{{returnType}}} = await response.getBodyAsFile() as any as {{{returnType}}};
             {{/isBinary}}
             {{^isBinary}}
-            const body: {{{returnType}}} = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "{{{returnType}}}", "{{returnFormat}}"
-            ) as {{{returnType}}};
+            const body: {{{returnType}}} = ObjectSerializer.parse(await response.body.text(), contentType)
             {{/isBinary}}
             return new HttpInfo(response.httpStatusCode, response.headers, response.body, body);
             {{/returnType}}

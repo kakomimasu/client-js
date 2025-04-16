@@ -6,12 +6,12 @@ export * from '{{{ importPath }}}{{importFileExtension}}';
 
 {{#models}}
 {{#model}}
-import { {{classname}}{{#oneOf}}{{#-first}}Class{{/-first}}{{/oneOf}}{{^oneOf}}{{#hasEnums}}{{#vars}}{{#isEnum}}, {{classname}}{{enumName}} {{/isEnum}} {{/vars}}{{/hasEnums}}{{/oneOf}} } from '{{{ importPath }}}{{importFileExtension}}';
+import { {{classname}}Class{{^oneOf}}{{#hasEnums}}{{#vars}}{{#isEnum}}, {{classname}}{{enumName}} {{/isEnum}} {{/vars}}{{/hasEnums}}{{/oneOf}} } from '{{{ importPath }}}{{importFileExtension}}';
 {{/model}}
 {{/models}}
 
 /* tslint:disable:no-unused-variable */
-let primitives = [
+const primitives = [
                     "string",
                     "boolean",
                     "double",
@@ -22,7 +22,7 @@ let primitives = [
                     "any"
                  ];
 
-let enumsMap: Set<string> = new Set<string>([
+const enumsMap: Set<string> = new Set<string>([
     {{#models}}
         {{#model}}
             {{#isEnum}}
@@ -39,11 +39,12 @@ let enumsMap: Set<string> = new Set<string>([
     {{/models}}
 ]);
 
-let typeMap: {[index: string]: any} = {
+// deno-lint-ignore no-explicit-any
+const typeMap: {[index: string]: any} = {
     {{#models}}
         {{#model}}
             {{^isEnum}}
-    "{{classname}}": {{classname}}{{#oneOf}}{{#-first}}Class{{/-first}}{{/oneOf}},
+    "{{classname}}": {{classname}}Class,
             {{/isEnum}}
         {{/model}}
     {{/models}}
@@ -109,6 +110,7 @@ const mapPrefix = "{ [key: string]: ";
 const mapSuffix = "; }";
 
 export class ObjectSerializer {
+    // deno-lint-ignore no-explicit-any
     public static findCorrectType(data: any, expectedType: string) {
         if (data == undefined) {
             return expectedType;
@@ -126,13 +128,13 @@ export class ObjectSerializer {
             }
 
             // Check the discriminator
-            let discriminatorProperty = typeMap[expectedType].discriminator;
+            const discriminatorProperty = typeMap[expectedType].discriminator;
             if (discriminatorProperty == null) {
                 return expectedType; // the type does not have a discriminator. use it.
             } else {
                 if (data[discriminatorProperty]) {
-                    var discriminatorType = data[discriminatorProperty];
-                    let mapping = typeMap[expectedType].mapping;
+                    const discriminatorType = data[discriminatorProperty];
+                    const mapping = typeMap[expectedType].mapping;
                     if (mapping != undefined && mapping[discriminatorType]) {
                         return mapping[discriminatorType]; // use the type given in the discriminator
                     } else if(typeMap[discriminatorType]) {
@@ -147,28 +149,31 @@ export class ObjectSerializer {
         }
     }
 
+    // deno-lint-ignore no-explicit-any
     public static serialize(data: any, type: string, format: string): any {
         if (data == undefined) {
             return data;
         } else if (primitives.indexOf(type.toLowerCase()) !== -1) {
             return data;
         } else if (type.endsWith(nullableSuffix)) {
-            let subType: string = type.slice(0, -nullableSuffix.length); // Type | null => Type
+            const subType: string = type.slice(0, -nullableSuffix.length); // Type | null => Type
             return ObjectSerializer.serialize(data, subType, format);
         } else if (type.endsWith(optionalSuffix)) {
-            let subType: string = type.slice(0, -optionalSuffix.length); // Type | undefined => Type
+            const subType: string = type.slice(0, -optionalSuffix.length); // Type | undefined => Type
             return ObjectSerializer.serialize(data, subType, format);
         } else if (type.startsWith(arrayPrefix)) {
-            let subType: string = type.slice(arrayPrefix.length, -arraySuffix.length); // Array<Type> => Type
-            let transformedData: any[] = [];
-            for (let date of data) {
+            const subType: string = type.slice(arrayPrefix.length, -arraySuffix.length); // Array<Type> => Type
+            // deno-lint-ignore no-explicit-any
+            const transformedData: any[] = [];
+            for (const date of data) {
                 transformedData.push(ObjectSerializer.serialize(date, subType, format));
             }
             return transformedData;
         } else if (type.startsWith(mapPrefix)) {
-            let subType: string = type.slice(mapPrefix.length, -mapSuffix.length); // { [key: string]: Type; } => Type
-            let transformedData: { [key: string]: any } = {};
-            for (let key in data) {
+            const subType: string = type.slice(mapPrefix.length, -mapSuffix.length); // { [key: string]: Type; } => Type
+            // deno-lint-ignore no-explicit-any
+            const transformedData: { [key: string]: any } = {};
+            for (const key in data) {
                 transformedData[key] = ObjectSerializer.serialize(
                     data[key],
                     subType,
@@ -199,15 +204,17 @@ export class ObjectSerializer {
             type = this.findCorrectType(data, type);
 
             // get the map for the correct type.
-            let attributeTypes = typeMap[type].getAttributeTypeMap();
-            let instance: {[index: string]: any} = {};
-            for (let attributeType of attributeTypes) {
+            const attributeTypes = typeMap[type].getAttributeTypeMap();
+            // deno-lint-ignore no-explicit-any
+            const instance: {[index: string]: any} = {};
+            for (const attributeType of attributeTypes) {
                 instance[attributeType.baseName] = ObjectSerializer.serialize(data[attributeType.name], attributeType.type, attributeType.format);
             }
             return instance;
         }
     }
 
+    // deno-lint-ignore no-explicit-any
     public static deserialize(data: any, type: string, format: string): any {
         // polymorphism may change the actual type.
         type = ObjectSerializer.findCorrectType(data, type);
@@ -216,22 +223,24 @@ export class ObjectSerializer {
         } else if (primitives.indexOf(type.toLowerCase()) !== -1) {
             return data;
         } else if (type.endsWith(nullableSuffix)) {
-            let subType: string = type.slice(0, -nullableSuffix.length); // Type | null => Type
+            const subType: string = type.slice(0, -nullableSuffix.length); // Type | null => Type
             return ObjectSerializer.deserialize(data, subType, format);
         } else if (type.endsWith(optionalSuffix)) {
-            let subType: string = type.slice(0, -optionalSuffix.length); // Type | undefined => Type
+            const subType: string = type.slice(0, -optionalSuffix.length); // Type | undefined => Type
             return ObjectSerializer.deserialize(data, subType, format);
         } else if (type.startsWith(arrayPrefix)) {
-            let subType: string = type.slice(arrayPrefix.length, -arraySuffix.length); // Array<Type> => Type
-            let transformedData: any[] = [];
-            for (let date of data) {
+            const subType: string = type.slice(arrayPrefix.length, -arraySuffix.length); // Array<Type> => Type
+            // deno-lint-ignore no-explicit-any
+            const transformedData: any[] = [];
+            for (const date of data) {
                 transformedData.push(ObjectSerializer.deserialize(date, subType, format));
             }
             return transformedData;
         } else if (type.startsWith(mapPrefix)) {
-            let subType: string = type.slice(mapPrefix.length, -mapSuffix.length); // { [key: string]: Type; } => Type
-            let transformedData: { [key: string]: any } = {};
-            for (let key in data) {
+            const subType: string = type.slice(mapPrefix.length, -mapSuffix.length); // { [key: string]: Type; } => Type
+            // deno-lint-ignore no-explicit-any
+            const transformedData: { [key: string]: any } = {};
+            for (const key in data) {
                 transformedData[key] = ObjectSerializer.deserialize(
                     data[key],
                     subType,
@@ -249,10 +258,10 @@ export class ObjectSerializer {
             if (!typeMap[type]) { // dont know the type
                 return data;
             }
-            let instance = new typeMap[type]();
-            let attributeTypes = typeMap[type].getAttributeTypeMap();
-            for (let attributeType of attributeTypes) {
-                let value = ObjectSerializer.deserialize(data[attributeType.baseName], attributeType.type, attributeType.format);
+            const instance = new typeMap[type]();
+            const attributeTypes = typeMap[type].getAttributeTypeMap();
+            for (const attributeType of attributeTypes) {
+                const value = ObjectSerializer.deserialize(data[attributeType.baseName], attributeType.type, attributeType.format);
                 if (value !== undefined) {
                     instance[attributeType.name] = value;
                 }
@@ -303,6 +312,7 @@ export class ObjectSerializer {
     /**
      * Convert data to a string according the given media type
      */
+    // deno-lint-ignore no-explicit-any
     public static stringify(data: any, mediaType: string): string {
         if (isTextLikeMimeType(mediaType)) {
             return String(data);

@@ -11,7 +11,8 @@
         "templateDir": "template",
         "additionalProperties": {
           "platform": "deno"
-        }
+        },
+        "openapiGeneratorIgnoreList": "*.md,.gitattributes,git_push.sh,rxjsStub.ts,middleware.ts,types/ObservableAPI.ts,types/ObjectParamAPI.ts"
       }
     }
   }

@@ -1,5 +1,10 @@
 {
   "tasks": {
     "generate": "openapi-generator-cli generate && deno fmt && deno lint --fix || deno check ."
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-unused-vars"]
+    }
   }
 }

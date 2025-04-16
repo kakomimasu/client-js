@@ -7,7 +7,6 @@ import * as http from 'http';
 import * as https from 'https';
 {{/node}}
 {{/platforms}}
-import { Observable, from } from {{#useRxJS}}'rxjs'{{/useRxJS}}{{^useRxJS}}'../rxjsStub{{importFileExtension}}'{{/useRxJS}};
 
 {{#platforms}}
 {{^deno}}
@@ -292,10 +291,12 @@ export class ResponseContext {
     public getBodyAsAny(): Promise<string | {{{fileContentDataType}}} | undefined> {
         try {
             return this.body.text();
+        // deno-lint-ignore no-empty
         } catch {}
 
         try {
             return this.body.binary();
+        // deno-lint-ignore no-empty
         } catch {}
 
         return Promise.resolve(undefined);
@@ -303,19 +304,7 @@ export class ResponseContext {
 }
 
 export interface HttpLibrary {
-    send(request: RequestContext): Observable<ResponseContext>;
-}
-
-export interface PromiseHttpLibrary {
     send(request: RequestContext): Promise<ResponseContext>;
-}
-
-export function wrapHttpLibrary(promiseHttpLibrary: PromiseHttpLibrary): HttpLibrary {
-  return {
-    send(request: RequestContext): Observable<ResponseContext> {
-      return from(promiseHttpLibrary.send(request));
-    }
-  }
 }
 
 export class HttpInfo<T> extends ResponseContext {

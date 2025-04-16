@@ -16,16 +16,7 @@ import { HttpFile } from '../http/http{{importFileExtension}}';
 {{#-first}}{{>model/modelOneOf}}{{/-first}}
 {{/oneOf}}
 {{^oneOf}}
-export class {{classname}} {{#parent}}extends {{{.}}} {{/parent}}{
-{{#vars}}
-{{#description}}
-    /**
-    * {{{.}}}
-    */
-{{/description}}
-    '{{name}}'{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}{{#isNullable}} | null{{/isNullable}};
-{{/vars}}
-
+export class {{classname}}Class {{#parent}}extends {{{.}}} {{/parent}}{
     {{#discriminator}}
     static {{#parent}}override {{/parent}}readonly discriminator: string | undefined = "{{discriminatorName}}";
     {{/discriminator}}
@@ -58,12 +49,12 @@ export class {{classname}} {{#parent}}extends {{{.}}} {{/parent}}{
         {{/vars}}
     ];
 
-    static {{#parent}}override {{/parent}}getAttributeTypeMap() {
+    static {{#parent}}override {{/parent}}getAttributeTypeMap(): typeof {{classname}}Class.attributeTypeMap {
         {{#parent}}
-        return super.getAttributeTypeMap().concat({{classname}}.attributeTypeMap);
+        return super.getAttributeTypeMap().concat({{classname}}Class.attributeTypeMap);
         {{/parent}}
         {{^parent}}
-        return {{classname}}.attributeTypeMap;
+        return {{classname}}Class.attributeTypeMap;
         {{/parent}}
     }
     {{/isArray}}
@@ -78,21 +69,31 @@ export class {{classname}} {{#parent}}extends {{{.}}} {{/parent}}{
         {{/discriminatorValue}}
         {{/allVars}}
         {{#discriminatorName}}
-        this.{{discriminatorName}} = "{{classname}}";
+        this.{{discriminatorName}} = "{{classname}}Class";
         {{/discriminatorName}}
     }
+}
+
+export interface {{classname}} {
+    {{#vars}}
+    {{#description}}
+    /**
+    * {{{.}}}
+    */
+    {{/description}}
+    '{{name}}'{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}{{#isNullable}} | null{{/isNullable}};
+    {{/vars}}
 }
 {{#hasEnums}}
 
 {{#vars}}
 {{#isEnum}}
-export enum {{classname}}{{enumName}} {
+export type {{classname}}{{enumName}} = |
     {{#allowableValues}}
     {{#enumVars}}
-    {{name}} = {{{value}}}{{^-last}},{{/-last}}
+    {{{value}}}{{^-last}}|{{/-last}}
     {{/enumVars}}
     {{/allowableValues}}
-}
 {{/isEnum}}
 {{/vars}}
 

@@ -50,7 +50,8 @@ export class ServerConfiguration<T extends { [key: string]: string }> implements
 }
 
 {{#servers}}
-export const server{{-index}} = new ServerConfiguration<{ {{#variables}} "{{name}}": {{#enumValues}}"{{.}}"{{^-last}} | {{/-last}}{{/enumValues}}{{^enumValues}}string{{/enumValues}}{{^-last}},{{/-last}} {{/variables}} }>("{{url}}", { {{#variables}} "{{name}}": "{{defaultValue}}" {{^-last}},{{/-last}}{{/variables}} })
+// deno-lint-ignore ban-types
+export const server{{-index}}: ServerConfiguration<{}> = new ServerConfiguration<{ {{#variables}} "{{name}}": {{#enumValues}}"{{.}}"{{^-last}} | {{/-last}}{{/enumValues}}{{^enumValues}}string{{/enumValues}}{{^-last}},{{/-last}} {{/variables}} }>("{{url}}", { {{#variables}} "{{name}}": "{{defaultValue}}" {{^-last}},{{/-last}}{{/variables}} })
 {{/servers}}
 
 export const servers = [{{#servers}}server{{-index}}{{^-last}}, {{/-last}}{{/servers}}];

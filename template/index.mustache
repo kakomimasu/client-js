@@ -9,36 +9,9 @@ export * from "./apis/exception{{importFileExtension}}";
 export * from "./servers{{importFileExtension}}";
 export { RequiredError } from "./apis/baseapi{{importFileExtension}}";
 
-{{#useRxJS}}
-export { Middleware } from './middleware{{importFileExtension}}';
-{{/useRxJS}}
-{{^useRxJS}}
-export type { PromiseMiddleware as Middleware, Middleware as ObservableMiddleware } from './middleware{{importFileExtension}}';
-export { Observable } from './rxjsStub{{importFileExtension}}';
-{{/useRxJS}}
-{{#useObjectParameters}}
-export { {{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}type {{classname}}{{operationIdCamelCase}}Request, {{/operation}}Object{{classname}} as {{classname}}{{^-last}}, {{/-last}} {{/operations}}{{/apis}}{{/apiInfo}}} from './types/ObjectParamAPI{{importFileExtension}}';
-{{/useObjectParameters}}
-{{^useObjectParameters}}
-{{#useRxJS}}
-export { {{#apiInfo}}{{#apis}}{{#operations}}Observable{{classname}} as {{classname}}{{^-last}}, {{/-last}} {{/operations}}{{/apis}}{{/apiInfo}}} from './types/ObservableAPI{{importFileExtension}}';
-{{/useRxJS}}
-{{^useRxJS}}
-export { {{#apiInfo}}{{#apis}}{{#operations}}Promise{{classname}} as {{classname}}{{^-last}}, {{/-last}} {{/operations}}{{/apis}}{{/apiInfo}}} from './types/PromiseAPI{{importFileExtension}}';
-{{/useRxJS}}
-{{/useObjectParameters}}
+export { PromiseApi as ApiClient } from './types/PromiseAPI{{importFileExtension}}';
 
 {{#useInversify}}
 export * from "./services/index{{importFileExtension}}";
-{{#useObjectParameters}}
-export { {{#apiInfo}}{{#apis}}{{#operations}}AbstractObject{{classname}} as Abstract{{classname}}{{^-last}}, {{/-last}} {{/operations}}{{/apis}}{{/apiInfo}}} from './services/ObjectParamAPI';
-{{/useObjectParameters}}
-{{^useObjectParameters}}
-{{#useRxJS}}
-export { {{#apiInfo}}{{#apis}}{{#operations}}AbstractObservable{{classname}} as Abstract{{classname}}{{^-last}}, {{/-last}} {{/operations}}{{/apis}}{{/apiInfo}}} from './services/ObservableAPI{{importFileExtension}}';
-{{/useRxJS}}
-{{^useRxJS}}
 export { {{#apiInfo}}{{#apis}}{{#operations}}AbstractPromise{{classname}} as Abstract{{classname}}{{^-last}}, {{/-last}} {{/operations}}{{/apis}}{{/apiInfo}}} from './services/PromiseAPI{{importFileExtension}}';
-{{/useRxJS}}
-{{/useObjectParameters}}
 {{/useInversify}}
