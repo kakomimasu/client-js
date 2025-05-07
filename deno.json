@@ -1,4 +1,7 @@
 {
+  "name": "@kakomimasu/client-js",
+  "version": "1.0.0-alpha.1",
+  "exports": "./src/index.ts",
   "tasks": {
     "generate": "openapi-generator-cli generate && deno fmt && deno lint --fix || deno check ."
   },
@@ -6,5 +9,14 @@
     "rules": {
       "exclude": ["no-unused-vars"]
     }
+  },
+  "publish": {
+    "exclude": [
+      "!src",
+      ".vscode",
+      ".github",
+      "template",
+      "openapitools.json"
+    ]
   }
 }
