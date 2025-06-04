@@ -3,7 +3,8 @@
   "version": "1.0.0-alpha.1",
   "exports": "./src/index.ts",
   "tasks": {
-    "generate": "openapi-generator-cli generate && deno fmt && deno lint --fix || deno check ."
+    "install": "deno install --allow-scripts",
+    "generate": "openapi-generator-cli generate && deno fmt && deno lint --fix"
   },
   "lint": {
     "rules": {
@@ -18,5 +19,12 @@
       "template",
       "openapitools.json"
     ]
+  },
+  "lock": false,
+  "nodeModulesDir": "auto",
+  "imports": {
+    "@kakomimasu/client-js": "./src/index.ts",
+    "@openapitools/openapi-generator-cli": "npm:@openapitools/openapi-generator-cli@^2.20.2",
+    "@std/async": "jsr:@std/async@^1.0.13"
   }
 }
