@@ -1,6 +1,6 @@
 {
   "name": "@kakomimasu/client-js",
-  "version": "1.0.0-alpha.1",
+  "version": "0.1.0",
   "exports": "./src/index.ts",
   "tasks": {
     "install": "deno install --allow-scripts",
