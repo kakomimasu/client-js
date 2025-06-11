@@ -36,7 +36,7 @@ jobs:
 
       - name: check version
         run: deno run .github/workflows/check-version.ts $VERSION
-        
+
       - name: Install packages (openapi-generator)
         run: deno task install
 
