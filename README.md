@@ -1,18 +1,48 @@
-# Kakomimasu server client for js/ts(browser/deno/node)
+# Kakomimasu server client for deno/node
 
-# 対応状況
+[![JSR](https://jsr.io/badges/@kakomimasu/client-js)](https://jsr.io/@kakomimasu/client-js)
 
-- ブラウザ(ESModules)
-- Deno
-- Node.js
+# 使用方法
 
-# メモ
-## Deno to Node
-開発はブラウザ互換のDenoを使用している。
-そのままではNodeモジュールではインポート時の拡張子などの問題が起こるため、Node用に変換が必要
+```ts
+import { ApiClient } from "@kakomimasu/client-js";
 
-下記コマンドで`package.json`,`package-lock.json`,`esm`フォルダ,`cjs`フォルダを自動生成してくれる。
+const client = new ApiClient();
+
+const boards = await client.getBoards();
+console.log(boards);
+```
+
+その他の例は、[samples](./samples/) をご覧ください
+
+# Contributing
+
+## OpenAPI Generator のインストール
+
+ソースファイルの生成には [OpenAPI Generator](https://openapi-generator.tech/)
+を使用しています。
 
 ```console
-$ deno task dnt
+$ deno task install
+```
+
+## 生成
+
+生成は [template ディレクトリ](./template/) のテンプレートを使用して行われます。
+コマンド実行時に OpenAPI 定義ファイル
+（[https://api.kakomimasu.com/v1/openapi.json](https://api.kakomimasu.com/v1/openapi.json)）
+を使って生成されます
+
+```console
+$ deno task generate
+```
+
+## テスト
+
+テストは PR 作成時の GitHub Actions で行われます。
+ローカルで試す方は、[kakomimasu/server](https://github.com/kakomimasu/server)
+を起動しておく必要があります。
+
+```
+$ deno test -A .
 ```
