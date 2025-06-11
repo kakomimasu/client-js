@@ -1,18 +1,4 @@
 {
-  "deno.enable": true,
-  "deno.lint": true,
-  "deno.unstable": true,
-  // "[javascript]": {
-  //   "editor.defaultFormatter": "denoland.vscode-deno"
-  // },
-  // "[typescript]": {
-  //   "editor.defaultFormatter": "denoland.vscode-deno"
-  // },
-  // "[json]": {
-  //   "editor.defaultFormatter": "denoland.vscode-deno"
-  // },
-  "deno.suggest.imports.hosts": {
-    "https://deno.land": false
-  },
-  "deno.enablePaths": ["./scripts", "./deno"],
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "deno.enable": true
 }

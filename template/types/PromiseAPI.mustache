@@ -1,0 +1,109 @@
+import { ResponseContext, RequestContext, HttpFile, HttpInfo } from '../http/http{{importFileExtension}}';
+import { IsomorphicFetchHttpLibrary } from "../http/isomorphic-fetch{{importFileExtension}}";
+import { Configuration, ConfigurationParameters{{^useInversify}}, PromiseConfigurationOptions{{/useInversify}} } from '../configuration{{importFileExtension}}'
+import { ServerConfiguration, server1 } from "../servers{{importFileExtension}}";
+{{#useInversify}}
+import { injectable, inject, optional } from "inversify";
+import { AbstractConfiguration } from "../services/configuration";
+{{/useInversify}}
+
+{{#models}}
+{{#model}}
+import { {{{ classname }}} } from '{{{ importPath }}}{{importFileExtension}}';
+{{/model}}
+{{/models}}
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+import { {{classname}}RequestFactory, {{classname}}ResponseProcessor} from "../apis/{{classname}}{{importFileExtension}}";
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
+
+export class PromiseApi {
+    private configuration: Configuration;
+    private httpLibrary = new IsomorphicFetchHttpLibrary();
+
+    {{#apiInfo}}
+    {{#apis}}
+    {{#operations}}
+    private requestFactory{{classname}}: {{classname}}RequestFactory;
+    private responseProcessor{{classname}}: {{classname}}ResponseProcessor;
+    {{/operations}}
+    {{/apis}}
+    {{/apiInfo}}
+    
+    public constructor(
+        conf?: ConfigurationParameters,
+    ) {
+        const configuration: Configuration = {
+            baseServer: conf?.baseUrl !== undefined ? new ServerConfiguration(conf.baseUrl, {}) : server1,
+            httpApi: conf?.httpApi || new IsomorphicFetchHttpLibrary(),
+            authMethods: conf?.authMethods ?? {}
+        };
+        this.configuration = configuration;
+        {{#apiInfo}}
+        {{#apis}}
+        {{#operations}}
+        this.requestFactory{{classname}} = new {{classname}}RequestFactory(configuration);
+        this.responseProcessor{{classname}} = new {{classname}}ResponseProcessor();
+        {{/operations}}
+        {{/apis}}
+        {{/apiInfo}}
+    }
+
+    {{#apiInfo}}
+    {{#apis}}
+    {{#operations}}
+    {{#operation}}
+    /**
+     {{#notes}}
+     * {{&notes}}
+     {{/notes}}
+     {{#summary}}
+     * {{&summary}}
+     {{/summary}}
+     {{#allParams}}
+     * @param {{#required}}{{paramName}}{{/required}}{{^required}}[{{paramName}}]{{/required}}{{#description}} {{description}}{{/description}}
+     {{/allParams}}
+     */
+    public async {{nickname}}WithHttpInfo({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}_options?: {{#useInversify}}Configuration{{/useInversify}}{{^useInversify}}PromiseConfigurationOptions{{/useInversify}}): Promise<HttpInfo<{{{returnType}}}{{^returnType}}void{{/returnType}}>> {
+        let options = this.configuration;
+        {{^useInversify}}
+        if (_options){
+	    options = {
+                baseServer: _options.baseServer || this.configuration.baseServer,
+                httpApi: _options.httpApi || this.configuration.httpApi,
+                authMethods: _options.authMethods || this.configuration.authMethods,
+        }
+	}
+        {{/useInversify}}
+        const requestContext = await this.requestFactory{{classname}}.{{nickname}}({{#allParams}}{{paramName}}, {{/allParams}}options);
+        const responseContext = await this.httpLibrary.send(requestContext);
+        return await this.responseProcessor{{classname}}.{{nickname}}WithHttpInfo(responseContext)
+    }
+
+    /**
+     {{#notes}}
+     * {{&notes}}
+     {{/notes}}
+     {{#summary}}
+     * {{&summary}}
+     {{/summary}}
+     {{#allParams}}
+     * @param {{#required}}{{paramName}}{{/required}}{{^required}}[{{paramName}}]{{/required}}{{#description}} {{description}}{{/description}}
+     {{/allParams}}
+     */
+    public async {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}_options?: {{#useInversify}}Configuration{{/useInversify}}{{^useInversify}}PromiseConfigurationOptions{{/useInversify}}): Promise<{{{returnType}}}{{^returnType}}void{{/returnType}}> {
+        return (await this.{{nickname}}WithHttpInfo({{#allParams}}{{paramName}}, {{/allParams}}_options)).data;
+    }
+
+{{/operation}}
+
+
+{{/operations}}
+
+
+{{/apis}}
+{{/apiInfo}}
+}

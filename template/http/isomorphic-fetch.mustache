@@ -1,0 +1,55 @@
+import {HttpLibrary, RequestContext, ResponseContext} from './http{{importFileExtension}}';
+{{#platforms}}
+{{#node}}
+import fetch from "node-fetch";
+{{/node}}
+{{#browser}}
+import "whatwg-fetch";
+{{/browser}}
+{{/platforms}}
+
+export class IsomorphicFetchHttpLibrary implements HttpLibrary {
+
+    public send(request: RequestContext): Promise<ResponseContext> {
+        const method = request.getHttpMethod().toString();
+        const body = request.getBody();
+
+        const resultPromise = fetch(request.getUrl(), {
+            method: method,
+            body: body,
+            headers: request.getHeaders(),
+            {{#platforms}}
+            {{#node}}
+            agent: request.getAgent(),
+            {{/node}}
+            {{#browser}}
+            credentials: "same-origin"
+            {{/browser}}
+            {{/platforms}}
+        }).then((resp) => {
+            const headers: { [name: string]: string } = {};
+            resp.headers.forEach((value: string, name: string) => {
+              headers[name] = value;
+            });
+
+            {{#platforms}}
+            {{#node}}
+            const body = {
+              text: () => resp.text(),
+              binary: () => resp.buffer()
+            };
+            {{/node}}
+            {{^node}}
+            const body = {
+              text: () => resp.text(),
+              binary: () => resp.blob()
+            };
+            {{/node}}
+            {{/platforms}}
+            return new ResponseContext(resp.status, headers, body);
+        });
+
+        return resultPromise;
+
+    }
+}

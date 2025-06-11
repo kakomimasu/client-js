@@ -1,16 +1,30 @@
 {
-  "fmt": {
-    "files": {
-      "include": ["src/"]
-    }
+  "name": "@kakomimasu/client-js",
+  "version": "0.1.0",
+  "exports": "./src/index.ts",
+  "tasks": {
+    "install": "deno install --allow-scripts",
+    "generate": "openapi-generator-cli generate && deno fmt && deno lint --fix"
   },
   "lint": {
-    "files": {
-      "include": ["src/"]
+    "rules": {
+      "exclude": ["no-unused-vars"]
     }
   },
-  "tasks": {
-    "dnt": "deno run -A scripts/dnt.ts"
+  "publish": {
+    "exclude": [
+      "!src",
+      ".vscode",
+      ".github",
+      "template",
+      "openapitools.json"
+    ]
   },
-  "lock": false
+  "lock": false,
+  "nodeModulesDir": "auto",
+  "imports": {
+    "@kakomimasu/client-js": "./src/index.ts",
+    "@openapitools/openapi-generator-cli": "npm:@openapitools/openapi-generator-cli@^2.20.2",
+    "@std/async": "jsr:@std/async@^1.0.13"
+  }
 }
